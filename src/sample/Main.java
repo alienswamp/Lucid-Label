@@ -1,8 +1,7 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -54,59 +53,70 @@ public class Main extends Application {
         VBox vbox = new VBox(radioCOCO, radioImageNet, radioOpenImages, radioVOC, radioYOLO);
 
         popup.setOnHidden((event) -> {
+            //iterate over all images images directory
+            File imageFolder = new File("images/");
+            File[] listOfImages = imageFolder.listFiles();
+            for (int i = 0; i < listOfImages.length; i++) {
 
-            primaryStage.setTitle("Image");
-            StackPane sp = new StackPane();
-            Image flower = new Image("file:flower.png");
-            ImageView viewFlower = new ImageView(flower);
-            sp.getChildren().add(viewFlower);
+                StackPane sp = new StackPane();
+                //load in current image, exception bc may be null
+                File currentFile = listOfImages[i];
+                Image currentImage = new Image("file:" + listOfImages[i].toString());
+                primaryStage.setTitle("Image " + listOfImages[i].getName());
+                ImageView viewCurrentImage = new ImageView(currentImage);
+                sp.getChildren().add(viewCurrentImage);
 
-            ArrayList<Double> coordinates = new ArrayList<>();
+                ArrayList<Double> coordinates = new ArrayList<>();
 
-            viewFlower.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                viewCurrentImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
-                public void handle(MouseEvent me) {
-                    coordinates.add(me.getX());
-                    coordinates.add(me.getY());
-                    System.out.println(coordinates.toString() + ", ");
+                    public void handle(MouseEvent me) {
+                        coordinates.add(me.getX());
+                        coordinates.add(me.getY());
+                        System.out.println(coordinates.toString() + ", ");
 
-                    if (coordinates.size() % 4 == 0 && coordinates.size() != 0) {
-                        Rectangle r = new Rectangle();
-                        r.setWidth(RectangleCreator.rWidth((coordinates.get(coordinates.size() - 4)), coordinates.get(coordinates.size() - 2)));
-                        r.setHeight(RectangleCreator.rHeight((coordinates.get(coordinates.size() - 3)), coordinates.get(coordinates.size() - 1)));
-                        r.setTranslateX(RectangleCreator.rX((coordinates.get(coordinates.size() - 4)), (coordinates.get(coordinates.size() - 2)), sp.getWidth(), r.getWidth()));
-                        r.setTranslateY(RectangleCreator.rY((coordinates.get(coordinates.size() - 3)), (coordinates.get(coordinates.size() - 1)), sp.getHeight(), r.getHeight()));
-                        r.setFill(Color.TRANSPARENT);
-                        r.setStroke(Color.RED);
-                        r.setStrokeWidth(5);
-                        sp.getChildren().add(r);
-                    }
-                }
-            });
-
-            primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                public void handle(final WindowEvent event) {
-                    try {
-                        FileWriter writer = new FileWriter(new File("output.txt"));
-                        for (Double k : coordinates) {
-                            writer.write(String.valueOf(k) + " ");
+                        if (coordinates.size() % 4 == 0 && coordinates.size() != 0) {
+                            Rectangle r = new Rectangle();
+                            r.setWidth(RectangleCreator.rWidth((coordinates.get(coordinates.size() - 4)), coordinates.get(coordinates.size() - 2)));
+                            r.setHeight(RectangleCreator.rHeight((coordinates.get(coordinates.size() - 3)), coordinates.get(coordinates.size() - 1)));
+                            r.setTranslateX(RectangleCreator.rX((coordinates.get(coordinates.size() - 4)), (coordinates.get(coordinates.size() - 2)), sp.getWidth(), r.getWidth()));
+                            r.setTranslateY(RectangleCreator.rY((coordinates.get(coordinates.size() - 3)), (coordinates.get(coordinates.size() - 1)), sp.getHeight(), r.getHeight()));
+                            r.setFill(Color.TRANSPARENT);
+                            r.setStroke(Color.RED);
+                            r.setStrokeWidth(5);
+                            sp.getChildren().add(r);
                         }
-                        writer.close();
-                        System.exit(0);
-                    } catch (IOException ex) {
-                        System.exit(0);
                     }
-                }
-            });
+                });
+
+                primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    //write the labels to a text file
+                    public void handle(final WindowEvent event) {
+                        try {
+                            //need to remove file type for currentfile.getname
+                            FileWriter writer = new FileWriter(new File("output/output" + currentFile.getName() + ".txt"));
+                            for (Double k : coordinates) {
+                                writer.write(String.valueOf(k) + " ");
+                            }
+                            writer.close();
+                            System.exit(0);
+                        } catch (IOException ex) {
+                            System.exit(0);
+                        }
+                    }
+                });
 
 
-            Scene scene = new Scene(sp);
-            primaryStage.setScene(scene);
-            primaryStage.show();
+                Scene scene = new Scene(sp);
+                primaryStage.setScene(scene);
+                primaryStage.show();
+            }
         });
         Scene popupScene = new Scene(vbox, 150, 200);
         popup.setScene(popupScene);
         popup.show();
+
+
     }
 
 

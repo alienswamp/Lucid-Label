@@ -1,7 +1,7 @@
 package sample;
 import java.io.*;
 
-public class FileIO {
+public class FileIterator {
 
     public void openFile(File file){
 
