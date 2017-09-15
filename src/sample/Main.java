@@ -89,9 +89,12 @@ public class Main extends Application {
                     }
                 });
 
-                primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                Button imageCloser = new Button("Next Image");
+                sp.getChildren().add(imageCloser);
+
+                imageCloser.setOnAction(new EventHandler<ActionEvent>() {
                     //write the labels to a text file
-                    public void handle(final WindowEvent event) {
+                    public void handle(ActionEvent event) {
                         try {
                             //need to remove file type for currentfile.getname
                             FileWriter writer = new FileWriter(new File("output/output" + currentFile.getName() + ".txt"));
@@ -99,18 +102,20 @@ public class Main extends Application {
                                 writer.write(String.valueOf(k) + " ");
                             }
                             writer.close();
-                            System.exit(0);
+                            primaryStage.hide();
                         } catch (IOException ex) {
-                            System.exit(0);
+                            primaryStage.hide();
                         }
                     }
                 });
 
 
                 Scene scene = new Scene(sp);
+                primaryStage.setResizable(false);
                 primaryStage.setScene(scene);
                 primaryStage.show();
             }
+            System.exit(0);
         });
         Scene popupScene = new Scene(vbox, 150, 200);
         popup.setScene(popupScene);
