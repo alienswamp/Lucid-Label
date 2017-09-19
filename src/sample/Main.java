@@ -57,7 +57,6 @@ public class Main extends Application {
             File imageFolder = new File("images/");
             File[] listOfImages = imageFolder.listFiles();
             for (int i = 0; i < listOfImages.length; i++) {
-
                 StackPane sp = new StackPane();
                 //load in current image, exception bc may be null
                 File currentFile = listOfImages[i];
@@ -96,8 +95,7 @@ public class Main extends Application {
                     //write the labels to a text file
                     public void handle(ActionEvent event) {
                         try {
-                            //need to remove file type for currentfile.getname
-                            FileWriter writer = new FileWriter(new File("output/output" + currentFile.getName() + ".txt"));
+                            FileWriter writer = new FileWriter(new File("output/output" + currentFile.getName().substring(0, currentFile.getName().indexOf('.')) + ".txt"));
                             for (Double k : coordinates) {
                                 writer.write(String.valueOf(k) + " ");
                             }
@@ -114,8 +112,9 @@ public class Main extends Application {
                 primaryStage.setResizable(false);
                 primaryStage.setScene(scene);
                 primaryStage.show();
+                //issue with first picture closing immediately 
             }
-            System.exit(0);
+
         });
         Scene popupScene = new Scene(vbox, 150, 200);
         popup.setScene(popupScene);
