@@ -29,9 +29,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        // Popup on start
-        Platform.setImplicitExit(false);
-        Stage popup = new Stage();
+        Stage popup = new Stage(); // Popup on start
         popup.setTitle("Select");
 
         FileChooser fileChooser = new FileChooser();
@@ -114,6 +112,7 @@ public class Main extends Application {
                 scene.setCursor(Cursor.CROSSHAIR);
                 imageStage.setResizable(false); // Will be changed once I figure out scaling
                 imageStage.setScene(scene);
+                imageStage.setX(popup.getX() + popup.getWidth() + 5); // Making sure window doesn't cover controller popup
                 imageStage.showAndWait(); // Ensures that stage waits for user input
             }
 
@@ -130,6 +129,7 @@ public class Main extends Application {
         Scene popupScene = new Scene(vbox);
         popup.setScene(popupScene);
         popup.show();
+        popup.setX(popup.getX()); // Needs to be shifted by percentage of width of screen
 
 
     }
