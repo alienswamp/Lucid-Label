@@ -28,14 +28,14 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        //Popup on start
+        // Popup on start
         Platform.setImplicitExit(false);
         Stage popup = new Stage();
         popup.setTitle("Select");
 
         FileChooser fileChooser = new FileChooser();
 
-        //Button openButton = new Button("Open a picture in desired directory");
+        // Button openButton = new Button("Open a picture in desired directory");
 
         RadioButton radioYOLO = new RadioButton("YOLO");
         RadioButton radioVOC = new RadioButton("VOC");
@@ -52,16 +52,19 @@ public class Main extends Application {
 
         VBox vbox = new VBox(radioCOCO, radioImageNet, radioOpenImages, radioVOC, radioYOLO);
 
+        // Creating new stage so I can showAndWait
+        Stage imageStage = new Stage();
+
         popup.setOnHidden((event) -> {
-            //iterate over all images images directory
+            // Iterate over all images images directory
             File imageFolder = new File("images/");
             File[] listOfImages = imageFolder.listFiles();
             for (int i = 0; i < listOfImages.length; i++) {
                 StackPane sp = new StackPane();
-                //load in current image, exception bc may be null
+                // Load in current image, exception bc may be null
                 File currentFile = listOfImages[i];
                 Image currentImage = new Image("file:" + listOfImages[i].toString());
-                primaryStage.setTitle("Image " + listOfImages[i].getName());
+                imageStage.setTitle("Image " + listOfImages[i].getName());
                 ImageView viewCurrentImage = new ImageView(currentImage);
                 sp.getChildren().add(viewCurrentImage);
 
@@ -92,7 +95,7 @@ public class Main extends Application {
                 sp.getChildren().add(imageCloser);
 
                 imageCloser.setOnAction(new EventHandler<ActionEvent>() {
-                    //write the labels to a text file
+                    // Write the labels to a text file
                     public void handle(ActionEvent event) {
                         try {
                             FileWriter writer = new FileWriter(new File("output/output" + currentFile.getName().substring(0, currentFile.getName().indexOf('.')) + ".txt"));
@@ -100,19 +103,18 @@ public class Main extends Application {
                                 writer.write(String.valueOf(k) + " ");
                             }
                             writer.close();
-                            primaryStage.hide();
+                            imageStage.hide();
                         } catch (IOException ex) {
-                            primaryStage.hide();
+                            imageStage.hide();
                         }
                     }
                 });
 
 
                 Scene scene = new Scene(sp);
-                primaryStage.setResizable(false);
-                primaryStage.setScene(scene);
-                primaryStage.show();
-                //issue with first picture closing immediately 
+                imageStage.setResizable(false);
+                imageStage.setScene(scene);
+                imageStage.showAndWait();
             }
 
         });
