@@ -2,10 +2,11 @@ package sample;
 
 import javafx.application.Application;
 
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
+import javafx.stage.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -19,7 +20,7 @@ import java.io.*;
 import java.util.*;
 
 import javafx.application.Platform;
-import javafx.stage.WindowEvent;
+
 import javafx.scene.shape.*;
 
 
@@ -35,10 +36,9 @@ public class Main extends Application {
 
         FileChooser fileChooser = new FileChooser();
 
-        Button openDirButton = new Button("Open a picture in desired directory");
         Button closeButton = new Button("Finish labelling");
-        Button openNextButton = new Button("Open next picture");
-        Button openPrevButton = new Button("Open previous picture");
+        Button openNextButton = new Button("Open next picture"); // Not implemented
+        Button openPrevButton = new Button("Open previous picture"); // Not implemented
         Button beginButton = new Button("Begin labelling");
 
         RadioButton radioYOLO = new RadioButton("YOLO");
@@ -54,7 +54,7 @@ public class Main extends Application {
         radioVOC.setToggleGroup(formatGroup);
         radioYOLO.setToggleGroup(formatGroup);
 
-        VBox vbox = new VBox(radioCOCO, radioImageNet, radioOpenImages, radioVOC, radioYOLO, openDirButton, closeButton, openNextButton, openPrevButton, beginButton);
+        VBox vbox = new VBox(radioCOCO, radioImageNet, radioOpenImages, radioVOC, radioYOLO, closeButton, openNextButton, openPrevButton, beginButton);
 
         Stage imageStage = new Stage(); // Creating new stage so I can showAndWait
 
@@ -79,7 +79,7 @@ public class Main extends Application {
                         coordinates.add(me.getY());
                         System.out.println(coordinates.toString() + ", ");
 
-                        if (coordinates.size() % 4 == 0 && coordinates.size() != 0) {
+                        if (coordinates.size() % 4 == 0 && coordinates.size() != 0) { // Needs to be modified for continuous rendering
                             Rectangle r = new Rectangle();
                             r.setWidth(RectangleCreator.rWidth((coordinates.get(coordinates.size() - 4)), coordinates.get(coordinates.size() - 2)));
                             r.setHeight(RectangleCreator.rHeight((coordinates.get(coordinates.size() - 3)), coordinates.get(coordinates.size() - 1)));
@@ -110,12 +110,22 @@ public class Main extends Application {
 
 
                 Scene scene = new Scene(sp);
+                scene.setCursor(Cursor.CROSSHAIR);
                 imageStage.setResizable(false); // Will be changed once I figure out scaling
                 imageStage.setScene(scene);
                 imageStage.showAndWait(); // Ensures that stage waits for user input
             }
 
         });
+
+        popup.setOnCloseRequest((event) -> {
+            System.exit(0);
+        });
+
+        closeButton.setOnAction((event) -> {
+            System.exit(0);
+        });
+
         Scene popupScene = new Scene(vbox, 300, 200);
         popup.setScene(popupScene);
         popup.show();
