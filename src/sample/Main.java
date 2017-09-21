@@ -40,6 +40,7 @@ public class Main extends Application {
         Button openNextButton = new Button("Open next picture"); // Not implemented
         Button openPrevButton = new Button("Open previous picture"); // Not implemented
         Button beginButton = new Button("Begin labelling");
+        TextField categoryField = new TextField ("Type in current category here"); // Category input
 
         RadioButton radioYOLO = new RadioButton("YOLO");
         RadioButton radioVOC = new RadioButton("VOC");
@@ -54,7 +55,7 @@ public class Main extends Application {
         radioVOC.setToggleGroup(formatGroup);
         radioYOLO.setToggleGroup(formatGroup);
 
-        VBox vbox = new VBox(radioCOCO, radioImageNet, radioOpenImages, radioVOC, radioYOLO, closeButton, openNextButton, openPrevButton, beginButton);
+        VBox vbox = new VBox(radioCOCO, radioImageNet, radioOpenImages, radioVOC, radioYOLO, closeButton, openNextButton, openPrevButton, beginButton, categoryField);
 
         Stage imageStage = new Stage(); // Creating new stage so I can showAndWait
 
@@ -86,7 +87,7 @@ public class Main extends Application {
                             r.setTranslateX(RectangleCreator.rX((coordinates.get(coordinates.size() - 4)), (coordinates.get(coordinates.size() - 2)), sp.getWidth(), r.getWidth()));
                             r.setTranslateY(RectangleCreator.rY((coordinates.get(coordinates.size() - 3)), (coordinates.get(coordinates.size() - 1)), sp.getHeight(), r.getHeight()));
                             r.setFill(Color.TRANSPARENT);
-                            r.setStroke(Color.RED);
+                            r.setStroke(Color.color(Math.random(), Math.random(), Math.random())); // Needs to be implemented by category
                             r.setStrokeWidth(5);
                             sp.getChildren().add(r);
                         }
@@ -126,7 +127,7 @@ public class Main extends Application {
             System.exit(0);
         });
 
-        Scene popupScene = new Scene(vbox, 300, 200);
+        Scene popupScene = new Scene(vbox);
         popup.setScene(popupScene);
         popup.show();
 
