@@ -35,7 +35,11 @@ public class Main extends Application {
 
         FileChooser fileChooser = new FileChooser();
 
-        // Button openButton = new Button("Open a picture in desired directory");
+        Button openDirButton = new Button("Open a picture in desired directory");
+        Button closeButton = new Button("Finish labelling");
+        Button openNextButton = new Button("Open next picture");
+        Button openPrevButton = new Button("Open previous picture");
+        Button beginButton = new Button("Begin labelling");
 
         RadioButton radioYOLO = new RadioButton("YOLO");
         RadioButton radioVOC = new RadioButton("VOC");
@@ -50,16 +54,14 @@ public class Main extends Application {
         radioVOC.setToggleGroup(formatGroup);
         radioYOLO.setToggleGroup(formatGroup);
 
-        VBox vbox = new VBox(radioCOCO, radioImageNet, radioOpenImages, radioVOC, radioYOLO);
+        VBox vbox = new VBox(radioCOCO, radioImageNet, radioOpenImages, radioVOC, radioYOLO, openDirButton, closeButton, openNextButton, openPrevButton, beginButton);
 
-        // Creating new stage so I can showAndWait
-        Stage imageStage = new Stage();
+        Stage imageStage = new Stage(); // Creating new stage so I can showAndWait
 
-        popup.setOnHidden((event) -> {
-            // Iterate over all images images directory
+        beginButton.setOnAction((event) -> {
             File imageFolder = new File("images/");
             File[] listOfImages = imageFolder.listFiles();
-            for (int i = 0; i < listOfImages.length; i++) {
+            for (int i = 0; i < listOfImages.length; i++) { // Iterate over all images images directory
                 StackPane sp = new StackPane();
                 // Load in current image, exception bc may be null
                 File currentFile = listOfImages[i];
@@ -91,16 +93,12 @@ public class Main extends Application {
                     }
                 });
 
-                Button imageCloser = new Button("Next Image");
-                sp.getChildren().add(imageCloser);
-
-                imageCloser.setOnAction(new EventHandler<ActionEvent>() {
-                    // Write the labels to a text file
+                openNextButton.setOnAction(new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent event) {
                         try {
                             FileWriter writer = new FileWriter(new File("output/output" + currentFile.getName().substring(0, currentFile.getName().indexOf('.')) + ".txt"));
                             for (Double k : coordinates) {
-                                writer.write(String.valueOf(k) + " ");
+                                writer.write(String.valueOf(k) + " "); // Write the labels to a text file
                             }
                             writer.close();
                             imageStage.hide();
@@ -112,13 +110,13 @@ public class Main extends Application {
 
 
                 Scene scene = new Scene(sp);
-                imageStage.setResizable(false);
+                imageStage.setResizable(false); // Will be changed once I figure out scaling
                 imageStage.setScene(scene);
-                imageStage.showAndWait();
+                imageStage.showAndWait(); // Ensures that stage waits for user input
             }
 
         });
-        Scene popupScene = new Scene(vbox, 150, 200);
+        Scene popupScene = new Scene(vbox, 300, 200);
         popup.setScene(popupScene);
         popup.show();
 
