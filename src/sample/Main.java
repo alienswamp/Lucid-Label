@@ -84,7 +84,7 @@ public class Main extends Application {
                             r.setHeight(RectangleCreator.rHeight((coordinates.get(coordinates.size() - 3)), coordinates.get(coordinates.size() - 1)));
                             r.setTranslateX(RectangleCreator.rX((coordinates.get(coordinates.size() - 4)), (coordinates.get(coordinates.size() - 2)), sp.getWidth(), r.getWidth()));
                             r.setTranslateY(RectangleCreator.rY((coordinates.get(coordinates.size() - 3)), (coordinates.get(coordinates.size() - 1)), sp.getHeight(), r.getHeight()));
-                            r.setFill(Color.TRANSPARENT);
+                            r.setFill(Color.TRANSPARENT); // Need to fix, can't overlap labels
                             r.setStroke(Color.color(Math.random(), Math.random(), Math.random())); // Needs to be implemented by category
                             r.setStrokeWidth(5);
                             sp.getChildren().add(r);
