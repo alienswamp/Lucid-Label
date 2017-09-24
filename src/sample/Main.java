@@ -38,7 +38,7 @@ public class Main extends Application {
         Button openNextButton = new Button("Open next picture"); // Not implemented
         Button openPrevButton = new Button("Open previous picture"); // Not implemented
         Button beginButton = new Button("Begin labelling");
-        TextField categoryField = new TextField ("Type in current category here"); // Category input
+        TextField categoryField = new TextField("Type in current category here"); // Category input
 
         RadioButton radioYOLO = new RadioButton("YOLO");
         RadioButton radioVOC = new RadioButton("VOC");
@@ -97,7 +97,7 @@ public class Main extends Application {
                         try {
                             FileWriter writer = new FileWriter(new File("output/output" + currentFile.getName().substring(0, currentFile.getName().indexOf('.')) + ".txt"));
                             for (Double k : coordinates) {
-                                writer.write(String.valueOf(k) + " "); // Write the labels to a text file
+                                writer.write(categoryField.getText() + System.lineSeparator() + String.valueOf(k) + " " + System.lineSeparator()); // Label writing has glitch
                             }
                             writer.close();
                             imageStage.hide();
