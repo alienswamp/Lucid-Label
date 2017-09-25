@@ -92,8 +92,9 @@ public class Main extends Application {
                     }
                 });
 
-                openNextButton.setOnAction(new EventHandler<ActionEvent>() {
-                    public void handle(ActionEvent event) {
+                EventHandler writeHandler = new EventHandler() {
+                    @Override
+                    public void handle(Event event) {
                         try {
                             FileWriter writer = new FileWriter(new File("output/output" + currentFile.getName().substring(0, currentFile.getName().indexOf('.')) + ".txt"));
                             for (Double k : coordinates) {
@@ -105,7 +106,11 @@ public class Main extends Application {
                             imageStage.hide();
                         }
                     }
-                });
+                };
+
+                openNextButton.setOnAction(writeHandler);
+                closeButton.setOnAction(writeHandler);
+                imageStage.setOnCloseRequest(writeHandler);
 
 
                 Scene scene = new Scene(sp);
